@@ -1,0 +1,48 @@
+Modelling the AirPassengers Time Series
+========================================================
+author: Stephan Bartelheim   
+date: 13.04.2018
+autosize: true
+
+The Air Passengers Data
+========================================================
+
+```{r}
+data(AirPassengers)
+str(AirPassengers)
+```
+The AirPassengers dataset contains monthly total numbers of international airline passengers from 1949 to 1960.
+***
+```{r, echo=FALSE}
+library(forecast)
+plot(AirPassengers)
+```
+
+The Time Series decomposed
+========================================================
+
+```{r, echo=FALSE}
+plot(decompose(AirPassengers),"multiplicative")
+```
+ ***
+We can see that the series can be decomposed into a trend component a seasonal component and a noise. The noise doesn't look random and instead shows some autocorrelation.
+
+
+ ARIMA Model
+========================================================
+```{r, echo=FALSE}
+a<-auto.arima(AirPassengers)
+a
+```
+***
+Estimating an ARIMA model shows that there is indeed a AR, an I and a MA component which confirms our visual impression.
+
+
+Forecast till 2020
+========================================================
+
+```{r, echo=FALSE}
+plot(forecast(a,h=720))
+```
+***
+Using the model to forecast passenger numbers until 2020 is possible but yields extremely wide prediction intervals since we are predicting 60 years into the future. The prediction for 2016 is about 2 million, that's 25 million per year, whereas the real number according to IATA was close to 4 billion.
